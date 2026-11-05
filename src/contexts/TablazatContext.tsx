@@ -5,8 +5,13 @@ export type UjKonyvTipus = Omit<KonyvTipus, "id">;
 
 interface TablazatContextValue {
     torles: (id: number) => void,
+    rendezes: (mezo: keyof KonyvTipus) => void,
     konyvHozzaadas: (konyv: UjKonyvTipus) => void;
-    konyvLista: KonyvTipus[]
+    konyvLista: KonyvTipus[],
+    rendezettLista: KonyvTipus[],
+    rendezesiMezo:keyof KonyvTipus,
+    irany:String
+
 }
 
 export const TablazatContext = createContext<TablazatContextValue | undefined>(undefined)
@@ -19,6 +24,46 @@ interface TablazatProviderProps {
 export function TablazatProvider({ children }: TablazatProviderProps) {
 
     const [konyvLista, setTablazatLista] = useState<KonyvTipus[]>(KONYVLISTA)
+    const rendezettLista = [...konyvLista]
+
+
+
+    const [rendezesiMezo, setRendezesiMezo] =
+        useState<keyof KonyvTipus | null>(null)
+
+    const [irany, setIrany] =
+        useState<"novekvo" | "csokkeno">("novekvo")
+
+    if (rendezesiMezo !== null) {
+        rendezettLista.sort((a, b) => {
+            const ertekA = a[rendezesiMezo]
+            const ertekB = b[rendezesiMezo]
+
+            let eredmeny = 0
+
+            if (typeof ertekA === "number" &&
+                typeof ertekB === "number") {
+                eredmeny = ertekA - ertekB
+            } else {
+                eredmeny = String(ertekA).localeCompare(
+                    String(ertekB), "hu"
+                )
+            }
+
+            return irany === "novekvo" ? eredmeny : -eredmeny
+        })
+    }
+
+    function rendezes(mezo: keyof KonyvTipus) {
+        if (rendezesiMezo === mezo) {
+            setIrany(irany === "novekvo" ? "csokkeno" : "novekvo")
+        } else {
+            setRendezesiMezo(mezo)
+            setIrany("novekvo")
+        }
+    }
+
+
 
     function torles(id: number) {
         console.log(id)
@@ -38,7 +83,7 @@ export function TablazatProvider({ children }: TablazatProviderProps) {
     }
 
     return (
-        <TablazatContext.Provider value={{ torles, konyvLista, konyvHozzaadas }}>
+        <TablazatContext.Provider value={{ torles, konyvLista, rendezettLista, konyvHozzaadas, rendezes, rendezesiMezo, irany }}>
             {children}
         </TablazatContext.Provider>
     )
