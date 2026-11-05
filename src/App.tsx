@@ -3,6 +3,7 @@ import { useState } from 'react'
 import './App.css'
 import Tablazat from './components/Tablazat'
 import UjKonyv from './components/UjKonyv'
+import Szuro from './components/Szuro'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -12,7 +13,7 @@ function App() {
       <main>
         <header><h1>Admin felület</h1></header>
         <section><UjKonyv/></section>
-        <section>section</section>
+        <section><Szuro/></section>
         <article>
           <Tablazat />
         </article>

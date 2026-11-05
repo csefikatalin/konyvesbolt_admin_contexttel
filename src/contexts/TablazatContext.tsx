@@ -9,8 +9,10 @@ interface TablazatContextValue {
     konyvHozzaadas: (konyv: UjKonyvTipus) => void;
     konyvLista: KonyvTipus[],
     rendezettLista: KonyvTipus[],
-    rendezesiMezo:keyof KonyvTipus,
-    irany:String
+    rendezesiMezo: keyof KonyvTipus,
+    irany: String,
+    kereses:String,
+    setKereses: React.Dispatch<React.SetStateAction<string>>
 
 }
 
@@ -24,10 +26,14 @@ interface TablazatProviderProps {
 export function TablazatProvider({ children }: TablazatProviderProps) {
 
     const [konyvLista, setTablazatLista] = useState<KonyvTipus[]>(KONYVLISTA)
-    const rendezettLista = [...konyvLista]
 
+    const [kereses, setKereses] = useState<string>("")
+    const szurtLista = konyvLista.filter(konyv =>
+    konyv.cim.toLowerCase().includes(kereses.toLowerCase()) ||
+    konyv.szerzo.toLowerCase().includes(kereses.toLowerCase())
+)
 
-
+    const rendezettLista = [...szurtLista]
     const [rendezesiMezo, setRendezesiMezo] =
         useState<keyof KonyvTipus | null>(null)
 
@@ -83,7 +89,7 @@ export function TablazatProvider({ children }: TablazatProviderProps) {
     }
 
     return (
-        <TablazatContext.Provider value={{ torles, konyvLista, rendezettLista, konyvHozzaadas, rendezes, rendezesiMezo, irany }}>
+        <TablazatContext.Provider value={{ setKereses, kereses, torles, konyvLista, rendezettLista, konyvHozzaadas, rendezes, rendezesiMezo, irany }}>
             {children}
         </TablazatContext.Provider>
     )
