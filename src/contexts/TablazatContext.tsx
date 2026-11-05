@@ -1,10 +1,11 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { KONYVLISTA, type KonyvTipus } from "../adat";
 
-
+export type UjKonyvTipus = Omit<KonyvTipus, "id">;
 
 interface TablazatContextValue {
     torles: (id: number) => void,
+    konyvHozzaadas: (konyv: UjKonyvTipus) => void;
     konyvLista: KonyvTipus[]
 }
 
@@ -21,13 +22,23 @@ export function TablazatProvider({ children }: TablazatProviderProps) {
 
     function torles(id: number) {
         console.log(id)
-         setTablazatLista(elozoLista =>
-        elozoLista.filter(konyv => konyv.id !== id)
-    );
+        setTablazatLista(elozoLista =>
+            elozoLista.filter(konyv => konyv.id !== id)
+        );
+    }
+    function konyvHozzaadas(konyv: UjKonyvTipus) {
+        setTablazatLista(elozoLista => {
+            const ujId = Math.max(
+                0,
+                ...elozoLista.map(k => k.id)
+            ) + 1;
+
+            return [...elozoLista, { ...konyv, id: ujId }];
+        });
     }
 
     return (
-        <TablazatContext.Provider value={{ torles, konyvLista }}>
+        <TablazatContext.Provider value={{ torles, konyvLista, konyvHozzaadas }}>
             {children}
         </TablazatContext.Provider>
     )

@@ -1,0 +1,82 @@
+
+/* Új könyv űrlap */
+
+.uj-konyv {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 3px 12px #00000012;
+}
+
+.uj-konyv h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  color: var(--primary);
+}
+
+.uj-konyv form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.form-mezo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-mezo label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.form-mezo input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  color: var(--text);
+  background-color: var(--surface);
+}
+
+.form-mezo input:focus {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 1px;
+}
+
+.mentes {
+  grid-column: 1 / -1;
+  padding: 13px 20px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mentes:hover {
+  background-color: var(--primary-light);
+}
+
+.mentes:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  .uj-konyv {
+    padding: 20px;
+  }
+
+  .uj-konyv form {
+    grid-template-columns: 1fr;
+  }
+}
